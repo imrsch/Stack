@@ -5,40 +5,36 @@ public class Main {
 	public static void main(String[] args) 
 	{
 		
-		System.out.println("Bitte gib deinen Klammerausdruck an: (Exit ist Ende)"); // NUtte
-		Scanner sc = new Scanner(System.in);	
-		String EingabeString = sc.nextLine();
-				
-		System.out.println("Die Eingabe ist " + (pruefKlammern(EingabeString) ? "korrekt." : "falsch."));		
-		System.out.println("Programm Ende");
+		System.out.println("Bitte gib deinen Klammerausdruck ein, den du prüfen möchtest: ");
+		//Scanner
+		Scanner sc = new Scanner(System.in);
+		
+		String Input = sc.nextLine();	
+		System.out.println("Der Ausdruck ist " + (pruefCorrectness(Input) ? "richtig." : "falsch."));//boolean true/false	
+		System.out.println("Exit.");
 	}
 
-
-	public static boolean pruefKlammern(String EingabeString) 
+	//This method checks the expression for the correctness of the bracket
+	public static boolean pruefCorrectness(String Input) 
 	{
-		/*This method checks the entered string to the semantic correctness of the brackets.
-		 *To do this, a stack is created as a storage area, to which an open bracket is added each time one occurs in the string.  
-		 *When a closed bracket appears, it is compared with the top bracket on the stack to see if it belongs to the same kind.
-		 *If they do not match, an error message is output.
-		 *After this process it is checked if the stack is empty. If the stack is not empty, an error message is also output.
-		 * */
-		Stack ablage = new Stack();
-		for (int i = 0; i < EingabeString.length(); i++) 
+		Stack storage = new Stack();
+		for (int i = 0; i < Input.length(); i++) 
 		{
-			char Platzhalter = EingabeString.charAt(i);
-	
-			if (Platzhalter == '(' || Platzhalter == '{' || Platzhalter == '[') 
+			//variable place gets the input of the user
+			char place = Input.charAt(i);
+			//if input = opened bracket -> push bracket on the stack
+			if (place == '(' || place == '{' || place == '[') 
 			{	
-				//push a bracket on the stack
-				ablage.push(EingabeString.charAt(i));
+				storage.push(Input.charAt(i));
 			} 
-			else if ((Platzhalter == ')') || (Platzhalter == '}') || (Platzhalter == ']')) 
+			//if input != closed bracket -> pop storage
+			else if ((place == ')') || (place == '}') || (place== ']')) 
 			{		
-				char StackKlammer = ablage.pop();
+				char bracket = storage.pop();
 				//check if the brackets are from the same kind
-				if (!((StackKlammer == '(' && Platzhalter == ')') || 
-					  (StackKlammer == '{' && Platzhalter == '}') || 
-					  (StackKlammer== '[' && Platzhalter == ']'))
+				if (!((bracket == '(' && place == ')') || 
+					  (bracket == '{' && place == '}') || 
+					  (bracket== '[' && place == ']'))
 				   ) 
 				{
 					System.out.println("Falsches Zeichen an Stelle:  " + i);
@@ -46,10 +42,10 @@ public class Main {
 				}
 			}
 		}
-		//check is the storage is empty
-		if (ablage.pop() != '\u0000') 
+		//check if the stack is not empty
+		if (storage.pop() != '\u0000') 
 		{
-			System.out.println("Falsches Zeichen an Stelle:  "+EingabeString.length());
+			System.out.println("Falsches Zeichen an Stelle:  "+Input.length());
 			return false;
 		}
 		return true;
